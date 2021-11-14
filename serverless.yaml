@@ -1,0 +1,543 @@
+org: claireld
+app: royal-code
+service: royal-code
+frameworkVersion: "2"
+
+custom:
+  settings:
+    DYNAMODB_ENERGISER_TABLE: energiser-table # table name
+    DYNAMODB_BOOTCAMPER_TABLE: bootcamper-table # table name
+    DYNAMODB_BOOTCAMPER_2_TABLE: bootcamper-2-table # table name
+    DYNAMODB_BOOTCAMPER_4_TABLE: bootcamper-4-table # table name
+    DYNAMODB_BOOTCAMPER_8_TABLE: bootcamper-8-table # table name
+    DYNAMODB_RESOURCE_TABLE: resource-table # table name
+    DYNAMODB_RECORDING_TABLE: recording-table # table name
+    DYNAMODB_WEEK_TABLE: week-table # table name
+    DYNAMODB_EVENT_TABLE: event-table # table name
+    DOMAIN_SUFFIX: royal-code
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: "20201221"
+  region: eu-west-1
+  environment: ${self:custom.settings}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchGetItem
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_ENERGISER_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_BOOTCAMPER_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_BOOTCAMPER_2_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_BOOTCAMPER_4_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_BOOTCAMPER_8_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_RESOURCE_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_WEEK_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_RECORDING_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.DYNAMODB_EVENT_TABLE}"
+
+functions: #### Energiser Table ####
+  listEnergiser: # get all energisers
+    handler: handlerEnergiser.getAllEnergisers
+    events:
+      - http:
+          path: energisers
+          method: get
+          cors: true
+
+  energiser: # get energiser by ID
+    handler: handlerEnergiser.getEnergiserById
+    events:
+      - http:
+          path: energisers/{id}
+          method: get
+          cors: true
+
+  createEnergiser: # add new energiser
+    handler: handlerEnergiser.addEnergiser
+    events:
+      - http:
+          path: energisers
+          method: post
+          cors: true
+
+  updateEnergiser: # update energiser
+    handler: handlerEnergiser.updateEnergiser
+    events:
+      - http:
+          path: energisers/{id}
+          method: put
+          cors: true
+
+  deleteEnergiser: # delete energiser
+    handler: handlerEnergiser.deleteEnergiser
+    events:
+      - http:
+          path: energisers/{id}
+          method: delete
+          cors: true
+  #### Bootcamper Table ####
+  listBootcamper: # get all bootcampers
+    handler: handlerBootcamper.getAllBootcampers
+    events:
+      - http:
+          path: bootcampers
+          method: get
+          cors: true
+
+  bootcamper: # get bootcamper by ID
+    handler: handlerBootcamper.getBootcamperById
+    events:
+      - http:
+          path: bootcampers/{id}
+          method: get
+          cors: true
+
+  createBootcamper: # add new bootcamper
+    handler: handlerBootcamper.addBootcamper
+    events:
+      - http:
+          path: bootcampers
+          method: post
+          cors: true
+
+  updateBootcamper: # update bootcamper
+    handler: handlerBootcamper.updateBootcamper
+    events:
+      - http:
+          path: bootcampers/{id}
+          method: put
+          cors: true
+
+  deleteBootcamper: # delete bootcamper
+    handler: handlerBootcamper.deleteBootcamper
+    events:
+      - http:
+          path: bootcampers/{id}
+          method: delete
+          cors:
+            true
+            #### Bootcamper 2 Table ####
+  listBootcamperPairs: # get all bootcampers
+    handler: handlerBootcamperPairs.getAllBootcamperPairs
+    events:
+      - http:
+          path: bootcamper-pairs
+          method: get
+          cors: true
+
+  bootcamperPairs: # get bootcamper by ID
+    handler: handlerBootcamperPairs.getBootcamperPairById
+    events:
+      - http:
+          path: bootcamper-pairs/{id}
+          method: get
+          cors: true
+
+  createBootcamperPairs: # add new bootcamper
+    handler: handlerBootcamperPairs.addBootcamperPair
+    events:
+      - http:
+          path: bootcamper-pairs
+          method: post
+          cors: true
+
+  updateBootcamperPairs: # update bootcamper
+    handler: handlerBootcamperPairs.updateBootcamperPair
+    events:
+      - http:
+          path: bootcamper-pairs/{id}
+          method: put
+          cors: true
+
+  deleteBootcamperPairs: # delete bootcamper
+    handler: handlerBootcamperPairs.deleteBootcamperPair
+    events:
+      - http:
+          path: bootcamper-pairs/{id}
+          method: delete
+          cors:
+            true
+            #### Bootcamper 4 Table ####
+  listBootcamperFours: # get all bootcampers
+    handler: handlerBootcamperFours.getAllBootcamperFours
+    events:
+      - http:
+          path: bootcamper-fours
+          method: get
+          cors: true
+
+  bootcamperFours: # get bootcamper by ID
+    handler: handlerBootcamperFours.getBootcamperFourById
+    events:
+      - http:
+          path: bootcamper-fours/{id}
+          method: get
+          cors: true
+
+  createBootcamperFours: # add new bootcamper
+    handler: handlerBootcamperFours.addBootcamperFour
+    events:
+      - http:
+          path: bootcamper-fours
+          method: post
+          cors: true
+
+  updateBootcamperFours: # update bootcamper
+    handler: handlerBootcamperFours.updateBootcamperFour
+    events:
+      - http:
+          path: bootcamper-fours/{id}
+          method: put
+          cors: true
+
+  deleteBootcamperFours: # delete bootcamper
+    handler: handlerBootcamperFours.deleteBootcamperFour
+    events:
+      - http:
+          path: bootcamper-fours/{id}
+          method: delete
+          cors:
+            true
+            #### Bootcamper 8 Table ####
+  listBootcamperEights: # get all bootcampers
+    handler: handlerBootcamperEights.getAllBootcamperEights
+    events:
+      - http:
+          path: bootcamper-eights
+          method: get
+          cors: true
+
+  bootcamperEights: # get bootcamper by ID
+    handler: handlerBootcamperEights.getBootcamperEightById
+    events:
+      - http:
+          path: bootcamper-eights/{id}
+          method: get
+          cors: true
+
+  createBootcamperEights: # add new bootcamper
+    handler: handlerBootcamperEights.addBootcamperEight
+    events:
+      - http:
+          path: bootcamper-eights
+          method: post
+          cors: true
+
+  updateBootcamperEights: # update bootcamper
+    handler: handlerBootcamperEights.updateBootcamperEight
+    events:
+      - http:
+          path: bootcamper-eights/{id}
+          method: put
+          cors: true
+
+  deleteBootcamperEights: # delete bootcamper
+    handler: handlerBootcamperEights.deleteBootcamperEight
+    events:
+      - http:
+          path: bootcamper-eights/{id}
+          method: delete
+          cors: true
+  #### Resource Table ####
+  listResource: # get all resources
+    handler: handlerResource.getAllResources
+    events:
+      - http:
+          path: resources
+          method: get
+          cors: true
+
+  resource: # get resource by ID
+    handler: handlerResource.getResourceById
+    events:
+      - http:
+          path: resources/{id}
+          method: get
+          cors: true
+
+  createResource: # add new resource
+    handler: handlerResource.addResource
+    events:
+      - http:
+          path: resources
+          method: post
+          cors: true
+
+  updateResource: # update resource
+    handler: handlerResource.updateResource
+    events:
+      - http:
+          path: resources/{id}
+          method: put
+          cors: true
+
+  deleteResource: # delete resource
+    handler: handlerResource.deleteResource
+    events:
+      - http:
+          path: resources/{id}
+          method: delete
+          cors: true
+  #### Recordings Table ####
+  listRecordings: # get all recordings
+    handler: handlerZoom.getAllRecordings
+    events:
+      - http:
+          path: recordings
+          method: get
+          cors: true
+  recording: # get recording by ID
+    handler: handlerZoom.getRecordingById
+    events:
+      - http:
+          path: recordings/{id}
+          method: get
+          cors: true
+
+  createRecording: # add new recording
+    handler: handlerZoom.addRecording
+    events:
+      - http:
+          path: recordings
+          method: post
+          cors: true
+
+  updateRecording: # update recording
+    handler: handlerZoom.updateRecording
+    events:
+      - http:
+          path: recordings/{id}
+          method: put
+          cors: true
+
+  deleteRecording: # delete recording
+    handler: handlerZoom.deleteRecording
+    events:
+      - http:
+          path: recordings/{id}
+          method: delete
+          cors: true
+    #### Week Table ####
+  listWeek: # get all weeks
+    handler: handlerWeek.getAllWeeks
+    events:
+      - http:
+          path: weeks
+          method: get
+          cors: true
+  week: # get recording by ID
+    handler: handlerWeek.getWeekById
+    events:
+      - http:
+          path: weeks/{id}
+          method: get
+          cors: true
+
+  createWeek: # add new recording
+    handler: handlerWeek.addWeek
+    events:
+      - http:
+          path: weeks
+          method: post
+          cors: true
+
+  updateWeek: # update recording
+    handler: handlerWeek.updateWeek
+    events:
+      - http:
+          path: weeks/{id}
+          method: put
+          cors: true
+
+  deleteWeek: # delete recording
+    handler: handlerWeek.deleteWeek
+    events:
+      - http:
+          path: weeks/{id}
+          method: delete
+          cors: true
+  #### Event Table ####
+  listEvents: # get all events
+    handler: handlerEvent.getAllEvents
+    events:
+      - http:
+          path: events
+          method: get
+          cors: true
+
+  event: # get event by ID
+    handler: handlerEvent.getEventById
+    events:
+      - http:
+          path: events/{id}
+          method: get
+          cors: true
+
+  createEvent: # add new energiser
+    handler: handlerEvent.addEvent
+    events:
+      - http:
+          path: events
+          method: post
+          cors: true
+
+  updateEvent: # update event
+    handler: handlerEvent.updateEvent
+    events:
+      - http:
+          path: events/{id}
+          method: put
+          cors: true
+
+  deleteEvent: # delete event
+    handler: handlerEvent.deleteEvent
+    events:
+      - http:
+          path: events/{id}
+          method: delete
+          cors: true
+
+  listWeekEvents: # get all events within the next 7 days
+    handler: handlerEvent.getEventRangeById
+    events:
+      - http:
+          path: week-events/{id}
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    DynamoDbEnergiserTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_ENERGISER_TABLE}
+    DynamoDbBootcamperTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_BOOTCAMPER_TABLE}
+    DynamoDbResourceTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_RESOURCE_TABLE}
+    DynamoDbRecordingTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_RECORDING_TABLE}
+    DynamoDbBootcamperPairTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_BOOTCAMPER_2_TABLE}
+    DynamoDbBootcamperFourTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_BOOTCAMPER_4_TABLE}
+    DynamoDbBootcamperEightTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_BOOTCAMPER_8_TABLE}
+    DynamoDbWeekTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain # look into this
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_WEEK_TABLE}
+    DynamoDbEventTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S # string
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # means it's a partition key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1 # 1-2 reads per second, up to 4KB per item
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_EVENT_TABLE}
