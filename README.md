@@ -21,6 +21,7 @@ We narrowed this down to:
 This backend consists of 9 different REST API endpoints to hold all of the data required for the Dashboard app. The databases were deployed using Serverless which allowed for adaptability during project development.
 
 ## License
+MIT
 
 ## Credits
 - Valerio Romaniello
